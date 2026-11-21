@@ -4,19 +4,84 @@
 
 @layer base {
     html { font-family: 'Cairo', 'Tajawal', 'Noto Naskh Arabic', system-ui, sans-serif; }
-    body { @apply bg-slate-100 text-slate-800 antialiased; }
+    body { @apply text-slate-800 antialiased; }
     [x-cloak] { display: none !important; }
     /* numbers / dates / emails stay left-to-right inside the RTL page */
     input[dir="ltr"], textarea[dir="ltr"] { text-align: start; }
 }
 
 @layer components {
+    /* ---- Teacher workspace (teal / cool gray) ---- */
+    .role-teacher {
+        @apply bg-slate-100;
+        background-image: none;
+    }
+    .role-teacher .app-header {
+        @apply bg-white border-b border-slate-200;
+    }
+    .role-teacher .app-footer { @apply text-slate-400; }
+    .role-teacher .app-nav {
+        @apply bg-white border-b border-slate-200;
+    }
+    .role-teacher .btn-primary { @apply bg-teal-700 text-white hover:bg-teal-800 focus:ring-teal-600; }
+    .role-teacher .nav-brand { @apply text-teal-700; }
+    .role-teacher .nav-avatar { @apply bg-teal-700 text-white; }
+    .role-teacher .role-chip {
+        @apply bg-teal-50 text-teal-800 border border-teal-200;
+    }
+
+    /* ---- Supervisor workspace (ink navy + warm sand — clearly different) ---- */
+    .role-supervisor {
+        color: #1e293b;
+        background-color: #f3ebe0;
+        background-image:
+            radial-gradient(ellipse 80% 50% at 100% -10%, rgba(180, 83, 9, 0.12), transparent 55%),
+            radial-gradient(ellipse 60% 40% at 0% 100%, rgba(30, 41, 59, 0.08), transparent 50%),
+            repeating-linear-gradient(
+                -12deg,
+                rgba(30, 41, 59, 0.035) 0px,
+                rgba(30, 41, 59, 0.035) 1px,
+                transparent 1px,
+                transparent 14px
+            );
+        background-attachment: fixed;
+    }
+    .role-supervisor .app-header {
+        @apply border-b;
+        background: rgba(255, 250, 243, 0.92);
+        border-color: rgba(180, 83, 9, 0.18);
+        backdrop-filter: blur(6px);
+    }
+    .role-supervisor .app-footer { @apply text-slate-500; }
+    .role-supervisor .app-nav {
+        background: linear-gradient(90deg, #0f172a 0%, #1e293b 55%, #334155 100%);
+        border-bottom: 3px solid #d97706;
+    }
+    .role-supervisor .btn-primary {
+        @apply bg-amber-700 text-white hover:bg-amber-800 focus:ring-amber-600;
+    }
+    .role-supervisor .nav-brand { @apply text-amber-300; }
+    .role-supervisor .nav-avatar { @apply bg-amber-500 text-slate-900; }
+    .role-supervisor .role-chip {
+        @apply bg-amber-400/20 text-amber-200 border border-amber-400/40;
+    }
+    .role-supervisor .card {
+        @apply border-amber-900/10;
+        background: rgba(255, 252, 247, 0.96);
+        box-shadow: 0 1px 2px rgba(30, 41, 59, 0.06);
+    }
+    .role-supervisor .tbl thead th {
+        background: rgba(251, 191, 36, 0.12);
+        @apply text-slate-700 border-amber-900/10;
+    }
+
     .card { @apply bg-white rounded-xl border border-slate-200 shadow-sm; }
     .card-body { @apply p-4 sm:p-6; }
     .card-title { @apply text-base font-bold text-slate-800; }
 
     .label { @apply block text-sm font-semibold text-slate-700 mb-1; }
     .input { @apply block w-full rounded-lg border-slate-300 text-sm shadow-sm focus:border-teal-600 focus:ring-teal-600 disabled:bg-slate-100; }
+    .role-supervisor .input { @apply focus:border-amber-700 focus:ring-amber-600; }
     .hint { @apply text-xs text-slate-500 mt-1; }
 
     .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed; }

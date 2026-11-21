@@ -1,6 +1,11 @@
 <x-app-layout title="لوحة التحكم">
     <x-slot name="header">
-        <h1 class="text-xl font-bold text-slate-800">لوحة المشرف</h1>
+        <div>
+            <div class="flex items-center gap-2 mb-1">
+                <span class="inline-flex items-center rounded-md bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 text-[11px] font-bold">وضع المشرف</span>
+            </div>
+            <h1 class="text-xl font-bold text-slate-900">لوحة المشرف</h1>
+        </div>
         <div class="flex gap-2">
             <a href="{{ route('students.create') }}" class="btn-secondary btn-sm">+ طالب</a>
             <a href="{{ route('teachers.create') }}" class="btn-secondary btn-sm">+ معلم</a>

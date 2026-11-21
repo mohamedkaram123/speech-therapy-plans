@@ -12,12 +12,13 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans min-h-screen">
+    @php($isSupervisor = auth()->user()?->isSupervisor())
+    <body class="font-sans min-h-screen {{ $isSupervisor ? 'role-supervisor' : 'role-teacher' }}">
         <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
 
             @isset($header)
-                <header class="bg-white border-b border-slate-200 no-print">
+                <header class="app-header no-print">
                     <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
                         {{ $header }}
                     </div>
@@ -31,8 +32,12 @@
                 </div>
             </main>
 
-            <footer class="text-center text-xs text-slate-400 py-4 no-print">
+            <footer class="app-footer text-center text-xs py-4 no-print">
                 {{ config('speech.center_name') }} &middot; {{ config('speech.center_dept') }}
+                @if($isSupervisor)
+                    <span class="mx-1">·</span>
+                    <span class="font-semibold text-amber-800/80">وضع المشرف</span>
+                @endif
             </footer>
         </div>
     </body>
