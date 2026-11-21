@@ -14,12 +14,12 @@
     </x-slot>
 
     <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 mb-6">
-        <x-stat-card label="المعلمون النشطون" :value="$stats['teachers']" :href="route('teachers.index')" />
-        <x-stat-card label="الطلاب" :value="$stats['students']" tone="slate" :href="route('students.index')" />
-        <x-stat-card label="خطط بانتظار المراجعة" :value="$stats['pending_plans']" tone="amber" :href="route('plans.index', ['status' => 'pending_review'])" />
-        <x-stat-card label="تقييمات بانتظار المراجعة" :value="$stats['pending_evaluations']" tone="amber" :href="route('evaluations.index', ['status' => 'pending_review'])" />
-        <x-stat-card label="خطط معتمدة" :value="$stats['approved_plans']" tone="emerald" :href="route('plans.index', ['status' => 'approved'])" />
-        <x-stat-card label="خطط معادة للتعديل" :value="$stats['returned_plans']" tone="rose" :href="route('plans.index', ['status' => 'returned'])" />
+        <x-stat-card label="المعلمون النشطون" :value="$stats['teachers']" icon="users" :href="route('teachers.index')" />
+        <x-stat-card label="الطلاب" :value="$stats['students']" tone="slate" icon="students" :href="route('students.index')" />
+        <x-stat-card label="خطط بانتظار المراجعة" :value="$stats['pending_plans']" tone="amber" icon="clipboard" :href="route('plans.index', ['status' => 'pending_review'])" />
+        <x-stat-card label="تقييمات بانتظار المراجعة" :value="$stats['pending_evaluations']" tone="amber" icon="clipboard-check" :href="route('evaluations.index', ['status' => 'pending_review'])" />
+        <x-stat-card label="خطط معتمدة" :value="$stats['approved_plans']" tone="emerald" icon="star" :href="route('plans.index', ['status' => 'approved'])" />
+        <x-stat-card label="خطط معادة للتعديل" :value="$stats['returned_plans']" tone="rose" icon="return" :href="route('plans.index', ['status' => 'returned'])" />
     </div>
 
     <div class="grid lg:grid-cols-2 gap-6">
