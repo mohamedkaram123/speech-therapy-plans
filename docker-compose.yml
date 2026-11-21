@@ -1,0 +1,52 @@
+services:
+  app:
+    build: .
+    container_name: speech-therapy-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9080:80"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: https://azza.gowabas.com
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      RUN_MIGRATIONS: "1"
+    volumes:
+      - app_storage:/var/www/html/storage
+      - ./project-inputs:/var/www/html/project-inputs:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - speech_net
+
+  db:
+    image: mysql:8.0
+    container_name: speech-therapy-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: speech_therapy_plans
+      MYSQL_USER: speech_user
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - speech_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks:
+      - speech_net
+
+volumes:
+  app_storage:
+  speech_mysql_data:
+
+networks:
+  speech_net:
+    driver: bridge
