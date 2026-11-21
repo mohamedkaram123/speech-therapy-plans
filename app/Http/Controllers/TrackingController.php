@@ -81,12 +81,18 @@ class TrackingController extends Controller
                 return $r;
             });
 
-        // Sections by student period (morning / evening) as in the printed sheet.
-        $sections = $rows->groupBy(fn ($r) => $r['student']->period->value);
+        // Sections by student period (morning / evening / unset) as in the printed sheet.
+        $sections = $rows->groupBy(fn ($r) => $r['student']->period?->value ?? 'unset');
+
+        $sectionDefs = collect(StudentPeriod::cases())
+            ->mapWithKeys(fn (StudentPeriod $p) => [$p->value => $p->label()])
+            ->put('unset', 'بدون فترة بعد');
 
         return view('tracking.index', [
-            'sections' => collect(StudentPeriod::cases())
-                ->mapWithKeys(fn (StudentPeriod $p) => [$p->value => ['label' => $p->label(), 'rows' => $sections->get($p->value, collect())]])
+            'sections' => $sectionDefs
+                ->mapWithKeys(fn (string $label, string $key) => [
+                    $key => ['label' => $label, 'rows' => $sections->get($key, collect())],
+                ])
                 ->filter(fn ($s) => $s['rows']->isNotEmpty()),
             'total' => $rows->count(),
             'received' => $rows->filter(fn ($r) => $r['plan']?->submitted_at !== null)->count(),
