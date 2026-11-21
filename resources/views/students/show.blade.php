@@ -15,9 +15,11 @@
         <section class="card card-body lg:col-span-1">
             <h2 class="card-title mb-3">بيانات الطالب</h2>
             <dl class="text-sm space-y-2">
-                <div class="flex justify-between gap-3"><dt class="text-slate-500">المعلم</dt><dd class="font-semibold">{{ $student->teacher?->name }}</dd></div>
-                <div class="flex justify-between gap-3"><dt class="text-slate-500">الفترة</dt><dd>{{ $student->period->label() }}</dd></div>
-                <div class="flex justify-between gap-3"><dt class="text-slate-500">الميلاد (هجري)</dt><dd dir="ltr">{{ $student->birth_date_hijri ?: '—' }}</dd></div>
+                <div class="flex justify-between gap-3"><dt class="text-slate-500">المعلم</dt><dd class="font-semibold">{{ $student->teacher?->name ?: '—' }}</dd></div>
+                <div class="flex justify-between gap-3"><dt class="text-slate-500">الفترة</dt><dd>{{ $student->period?->label() ?: '—' }}</dd></div>
+                <div class="flex justify-between gap-3"><dt class="text-slate-500">العام الدراسي</dt><dd>{{ $student->academic_year ?: '—' }}</dd></div>
+                <div class="flex justify-between gap-3"><dt class="text-slate-500">الفصل الدراسي</dt><dd>{{ $student->semester?->label() ?: '—' }}</dd></div>
+                <div class="flex justify-between gap-3"><dt class="text-slate-500">الميلاد (ميلادي)</dt><dd dir="ltr">{{ $student->birth_date?->format('Y-m-d') ?: '—' }}</dd></div>
                 <div><dt class="text-slate-500 mb-1">التشخيص</dt><dd>{{ $student->diagnosis ?: '—' }}</dd></div>
             </dl>
         </section>

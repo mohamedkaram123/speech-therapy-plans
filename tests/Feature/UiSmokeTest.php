@@ -86,12 +86,14 @@ class UiSmokeTest extends TestCase
 
         $this->actingAs($sup)->post('/students', [
             'full_name' => 'طالب جديد', 'teacher_id' => $teacher->id, 'period' => 'evening', 'birth_date' => '2016-03-01',
+            'academic_year' => '1448-1449', 'semester' => 'first',
         ])->assertRedirect('/students');
         $student = Student::where('full_name', 'طالب جديد')->firstOrFail();
-        $this->assertNotEmpty($student->birth_date_hijri);
+        $this->assertSame('2016-03-01', $student->birth_date?->format('Y-m-d'));
+        $this->assertSame('1448-1449', $student->academic_year);
 
         $this->actingAs($sup)->get('/students')->assertOk()->assertSee('طالب جديد');
-        $this->actingAs($sup)->get("/students/{$student->id}/edit")->assertOk()->assertSee('هجري');
+        $this->actingAs($sup)->get("/students/{$student->id}/edit")->assertOk()->assertSee('ميلادي')->assertDontSee('هجري');
     }
 
     public function test_teacher_cannot_access_supervisor_areas_or_other_students(): void

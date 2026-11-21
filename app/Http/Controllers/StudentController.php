@@ -8,7 +8,6 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Student;
 use App\Models\User;
-use App\Support\HijriDate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -48,7 +47,7 @@ class StudentController extends Controller
     {
         $this->authorize('create', Student::class);
 
-        Student::create($this->prepared($request->validated()));
+        Student::create($request->validated());
 
         return redirect()->route('students.index')->with('success', 'تمت إضافة الطالب بنجاح.');
     }
@@ -73,7 +72,7 @@ class StudentController extends Controller
     {
         $this->authorize('update', $student);
 
-        $student->update($this->prepared($request->validated()));
+        $student->update($request->validated());
 
         return redirect()->route('students.index')->with('success', 'تم تحديث بيانات الطالب.');
     }
@@ -85,16 +84,6 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()->route('students.index')->with('success', 'تم حذف الطالب (الخطط السابقة محفوظة).');
-    }
-
-    /** Fills the Hijri birth date from the Gregorian one when only that was entered. */
-    private function prepared(array $data): array
-    {
-        if (empty($data['birth_date_hijri']) && ! empty($data['birth_date'])) {
-            $data['birth_date_hijri'] = HijriDate::toHijri(\Illuminate\Support\Carbon::parse($data['birth_date']));
-        }
-
-        return $data;
     }
 
     private function teachers(?int $includeId = null)

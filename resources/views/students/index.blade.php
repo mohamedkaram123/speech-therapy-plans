@@ -35,7 +35,7 @@
         <div class="table-wrap">
             <table class="tbl">
                 <thead><tr>
-                    <th>م</th><th>اسم الطالب</th>@if($isSup)<th>المعلم</th>@endif<th>الفترة</th><th>تاريخ الميلاد (هجري)</th><th>آخر خطة</th><th></th>
+                    <th>م</th><th>اسم الطالب</th>@if($isSup)<th>المعلم</th>@endif<th>الفترة</th><th>العام / الفصل</th><th>تاريخ الميلاد</th><th>آخر خطة</th><th></th>
                 </tr></thead>
                 <tbody>
                 @forelse ($students as $student)
@@ -43,9 +43,13 @@
                     <tr>
                         <td>{{ $students->firstItem() + $loop->index }}</td>
                         <td class="font-semibold"><a href="{{ route('students.show', $student) }}" class="hover:text-teal-700">{{ $student->full_name }}</a></td>
-                        @if($isSup)<td>{{ $student->teacher?->name }}</td>@endif
-                        <td>{{ $student->period->label() }}</td>
-                        <td dir="ltr" class="text-start">{{ $student->birth_date_hijri ?: '—' }}</td>
+                        @if($isSup)<td>{{ $student->teacher?->name ?: '—' }}</td>@endif
+                        <td>{{ $student->period?->label() ?: '—' }}</td>
+                        <td>
+                            {{ $student->academic_year ?: '—' }}
+                            @if($student->semester)<span class="text-slate-500"> / {{ $student->semester->label() }}</span>@endif
+                        </td>
+                        <td dir="ltr" class="text-start">{{ $student->birth_date?->format('Y-m-d') ?: '—' }}</td>
                         <td>
                             @if($plan)
                                 <a href="{{ route('plans.show', $plan) }}"><x-status-badge :status="$plan->status" /></a>

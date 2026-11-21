@@ -12,9 +12,11 @@ return new class extends Migration
             $table->id();
             $table->string('full_name')->index();
             $table->date('birth_date')->nullable(); // Gregorian
-            $table->string('birth_date_hijri', 20)->nullable();
-            $table->foreignId('teacher_id')->constrained('users');
-            $table->enum('period', ['morning', 'evening']);
+            $table->string('birth_date_hijri', 20)->nullable(); // legacy optional
+            $table->foreignId('teacher_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('period', 20)->nullable(); // morning|evening
+            $table->string('academic_year', 20)->nullable();
+            $table->string('semester', 20)->nullable(); // first|second
             $table->text('diagnosis')->nullable();
             $table->softDeletes();
             $table->timestamps();

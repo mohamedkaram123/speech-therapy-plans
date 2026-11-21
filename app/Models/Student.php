@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Semester;
 use App\Enums\StudentPeriod;
 use Database\Factories\StudentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,8 @@ class Student extends Model
         'birth_date_hijri',
         'teacher_id',
         'period',
+        'academic_year',
+        'semester',
         'diagnosis',
     ];
 
@@ -29,6 +32,7 @@ class Student extends Model
         return [
             'birth_date' => 'date',
             'period' => StudentPeriod::class,
+            'semester' => Semester::class,
         ];
     }
 
