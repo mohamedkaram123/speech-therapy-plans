@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html { font-family: 'Cairo', 'Tajawal', 'Noto Naskh Arabic', system-ui, sans-serif; }
+    body { @apply bg-slate-100 text-slate-800 antialiased; }
+    [x-cloak] { display: none !important; }
+    /* numbers / dates / emails stay left-to-right inside the RTL page */
+    input[dir="ltr"], textarea[dir="ltr"] { text-align: start; }
+}
+
+@layer components {
+    .card { @apply bg-white rounded-xl border border-slate-200 shadow-sm; }
+    .card-body { @apply p-4 sm:p-6; }
+    .card-title { @apply text-base font-bold text-slate-800; }
+
+    .label { @apply block text-sm font-semibold text-slate-700 mb-1; }
+    .input { @apply block w-full rounded-lg border-slate-300 text-sm shadow-sm focus:border-teal-600 focus:ring-teal-600 disabled:bg-slate-100; }
+    .hint { @apply text-xs text-slate-500 mt-1; }
+
+    .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed; }
+    .btn-primary { @apply btn bg-teal-700 text-white hover:bg-teal-800 focus:ring-teal-600; }
+    .btn-secondary { @apply btn bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 focus:ring-slate-400; }
+    .btn-danger { @apply btn bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500; }
+    .btn-success { @apply btn bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500; }
+    .btn-sm { @apply px-3 py-1.5 text-xs; }
+
+    .badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold; }
+
+    .table-wrap { @apply overflow-x-auto; }
+    .tbl { @apply min-w-full text-sm text-start; }
+    .tbl thead th { @apply bg-slate-50 text-slate-600 font-semibold text-start px-3 py-2.5 border-b border-slate-200 whitespace-nowrap; }
+    .tbl tbody td { @apply px-3 py-2.5 border-b border-slate-100 align-top; }
+    .tbl tbody tr:hover { @apply bg-slate-50/60; }
+}
+
+@media print {
+    .no-print { display: none !important; }
+    body { background: #fff; }
+    .card { box-shadow: none; border-color: #999; }
+}
