@@ -46,10 +46,16 @@ class TherapyPlanController extends Controller
         return view('plans.index', compact('plans'));
     }
 
-    public function create(Request $request, Student $student): View
+    public function create(Request $request, Student $student): View|RedirectResponse
     {
         $this->authorize('create', TherapyPlan::class);
         $this->authorize('view', $student);
+
+        if (! $student->teacher_id) {
+            return redirect()
+                ->route('students.edit', $student)
+                ->with('error', 'عيّن المعلمة المسؤولة عن الطالب أولاً قبل إنشاء الخطة.');
+        }
 
         $today = Carbon::today();
         $hijri = HijriDate::todayHijri();
@@ -59,9 +65,9 @@ class TherapyPlanController extends Controller
         return view('plans.create', [
             'student' => $student->load('teacher'),
             'defaults' => [
-                'academic_year' => $startYear.'-'.($startYear + 1),
+                'academic_year' => $student->academic_year ?: ($startYear.'-'.($startYear + 1)),
                 'start_date_hijri' => $hijri,
-                'semester' => $m >= 2 && $m <= 7 ? 'first' : 'second',
+                'semester' => $student->semester?->value ?: ($m >= 2 && $m <= 7 ? 'first' : 'second'),
             ],
             'semesters' => Semester::cases(),
             'today' => $today,
@@ -74,11 +80,27 @@ class TherapyPlanController extends Controller
         $student = Student::findOrFail($request->integer('student_id'));
         $this->authorize('view', $student);
 
+        if (! $student->teacher_id) {
+            return redirect()
+                ->route('students.edit', $student)
+                ->with('error', 'عيّن المعلمة المسؤولة عن الطالب أولاً قبل إنشاء الخطة.');
+        }
+
+        // If the student has no period yet, save the one chosen on the plan form.
+        if (! $student->period && $request->filled('period')) {
+            $student->update(['period' => $request->input('period')]);
+            $student->refresh();
+        }
+
+        if (! $student->period) {
+            return back()->withInput()->with('error', 'حدد فترة الطالب (صباحي/مسائي) قبل إنشاء الخطة.');
+        }
+
         try {
             $plan = $this->workflow->saveDraft(new TherapyPlan, [
-                ...$request->safe()->except('student_id'),
+                ...$request->safe()->except(['student_id', 'period']),
                 'student_id' => $student->id,
-                'teacher_id' => $request->user()->id,
+                'teacher_id' => $student->teacher_id,
             ], []);
         } catch (WorkflowException $e) {
             return back()->withInput()->with('error', $e->getMessage());

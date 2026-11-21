@@ -27,7 +27,7 @@
                 <div class="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-t border-slate-100">
                     <div>
                         <div class="font-semibold">{{ $student->full_name }}</div>
-                        <div class="text-xs text-slate-500">{{ $student->period->label() }}</div>
+                        <div class="text-xs text-slate-500">{{ $student->period?->label() ?: '—' }}</div>
                     </div>
                     <a href="{{ route('plans.create', $student) }}" class="btn-primary btn-sm">إنشاء خطة</a>
                 </div>

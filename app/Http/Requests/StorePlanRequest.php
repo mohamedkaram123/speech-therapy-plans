@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\Semester;
+use App\Enums\StudentPeriod;
 use App\Http\Requests\Concerns\NormalizesInput;
 use App\Models\Student;
 use App\Models\TherapyPlan;
@@ -42,6 +43,7 @@ class StorePlanRequest extends FormRequest
             'end_date_hijri' => ['required', 'string', 'max:20', 'regex:'.self::HIJRI_REGEX],
             'sessions_count' => ['required', 'integer', 'min:1', 'max:500'],
             'sessions_per_week' => ['required', 'integer', 'min:1', 'max:7'],
+            'period' => ['nullable', Rule::enum(StudentPeriod::class)],
         ];
     }
 
@@ -52,6 +54,11 @@ class StorePlanRequest extends FormRequest
             $end = $this->hijriToSortable($this->input('end_date_hijri'));
             if ($start && $end && $end < $start) {
                 $v->errors()->add('end_date_hijri', 'تاريخ نهاية الخطة يجب أن يكون بعد تاريخ البداية.');
+            }
+
+            $student = Student::find($this->input('student_id'));
+            if ($student && ! $student->period && ! $this->filled('period')) {
+                $v->errors()->add('period', 'فترة الطالب (صباحي/مسائي) مطلوبة.');
             }
 
             // One plan per student / year / semester.
